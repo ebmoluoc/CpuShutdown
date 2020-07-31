@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Authors>Michael Möller</Authors>
+    <Copyright>Copyright © 2009-2020 Michael Möller</Copyright>
+    <Description>This is a modified version of Open Hardware Monitor. Only the library is included and it uses the .NET Core 3.1 SDK. Modified by Philippe Coulombe for CpuShutdown.</Description>
+    <Version>0.9.5</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Hardware\WinRing0x64.sys" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Hardware\WinRing0x64.sys" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.7.0" />
+    <PackageReference Include="System.IO.Ports" Version="4.7.0" />
+    <PackageReference Include="System.Management" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>

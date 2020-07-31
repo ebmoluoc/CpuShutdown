@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\IconApplication.ico</ApplicationIcon>
+    <Authors>Philippe Coulombe</Authors>
+    <Copyright>Copyright (c) 2020 Philippe Coulombe</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CpuShutdown\CpuShutdown.csproj" />
+  </ItemGroup>
+
+</Project>

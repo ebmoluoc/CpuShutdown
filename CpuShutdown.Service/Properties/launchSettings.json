@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "CpuShutdown.Service": {
+      "commandName": "Project"
+    }
+  }
+}

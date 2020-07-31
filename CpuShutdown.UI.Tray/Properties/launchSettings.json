@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "CpuShutdown.UI.Tray": {
+      "commandName": "Project"
+    }
+  }
+}
