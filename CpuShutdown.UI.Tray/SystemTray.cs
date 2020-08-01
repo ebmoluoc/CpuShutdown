@@ -28,15 +28,6 @@ namespace CpuShutdown.UI.Tray
         }
 
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                _ipcClient.Close();
-
-            base.Dispose(disposing);
-        }
-
-
         private void OnIpcClientDataEvent(object sender, IpcClientDataEventArgs e)
         {
             _uiNotifyIcon.SetTemperature(e.Temperature);
@@ -44,6 +35,7 @@ namespace CpuShutdown.UI.Tray
             switch (e.Command)
             {
                 case IpcCommand.Close:
+                    _ipcClient.Close();
                     ExitThread();
                     break;
                 case IpcCommand.Alert:

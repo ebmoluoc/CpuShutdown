@@ -70,7 +70,7 @@ namespace CpuShutdown.Services.UiSettings
                     {
                         _uiSettings = new Process();
                         _uiSettings.StartInfo.FileName = AppSettings.UiSettingsPath;
-                        _uiSettings.StartInfo.Arguments = $"{AppSettings.MutexNameSwitch}{AppSettings.UiSettingsMutexName}";
+                        _uiSettings.StartInfo.Arguments = $"{AppSettings.ProjectGuidSwitch}{AppSettings.UiSettingsProjectGuid}";
                         _uiSettings.StartInfo.UseShellExecute = true;
                         _uiSettings.StartInfo.Verb = "runas";
                         _uiSettings.Exited += OnUiSettingsExited;

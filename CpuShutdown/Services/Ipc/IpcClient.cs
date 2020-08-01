@@ -110,9 +110,6 @@ namespace CpuShutdown.Services.Ipc
                     var command = (IpcCommand)BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(4));
 
                     IpcClientDataEvent?.Invoke(this, new IpcClientDataEventArgs(temperature, command));
-
-                    if (command == IpcCommand.Close)
-                        return;
                 }
                 else if (bytesCount == 0)
                 {

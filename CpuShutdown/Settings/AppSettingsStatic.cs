@@ -25,7 +25,7 @@ namespace CpuShutdown.Settings
 
         internal static string UiTrayPath => Path.Combine(AppDirectory, "CpuShutdown.UI.Tray.exe");
 
-        internal static string MutexNameSwitch => "-m:";
+        internal static string ProjectGuidSwitch => "-g:";
 
         internal static string PipeHandleSwitch => "-p:";
 
@@ -37,15 +37,15 @@ namespace CpuShutdown.Settings
 
         public static string ServiceName => "CpuShutdownSvc";
 
-        public static string UiSettingsMutexName => "fd68dbe5-6841-4370-b8ba-bae77c95dd2b";
+        public static string UiSettingsProjectGuid => "902B4B8F-F880-4B40-8EBC-61566A9D8348";
 
-        public static string UiTrayMutexName => "fab90191-7c21-4abb-b398-acca5efca162";
+        public static string UiTrayProjectGuid => "90D209F8-F0B2-4869-B904-3BB398FD198A";
 
-        public static string ServiceMutexName => "fd046fd3-bc44-4012-babb-59e0d2fc1e72";
+        public static string ServiceProjectGuid => "C6BAB326-3F3B-4686-8DE8-AD8C198943D2";
 
-        public static ILogger Logger => new LoggerConfiguration().MinimumLevel.Override("Microsoft", LogEventLevel.Warning).WriteTo.File(LogFilePath, fileSizeLimitBytes: 1048576, rollingInterval: RollingInterval.Month, retainedFileCountLimit: 2, shared: true).CreateLogger();
+        public static ILogger Logger => new LoggerConfiguration().MinimumLevel.Override("Microsoft", LogEventLevel.Warning).WriteTo.File(LogFilePath, fileSizeLimitBytes: 10485760, rollingInterval: RollingInterval.Month, retainedFileCountLimit: 2, shared: true).CreateLogger();
 
-        public static int WM_ACTIVATE_UI_SETTINGS => NativeMethods.RegisterWindowMessage(UiSettingsMutexName);
+        public static int WM_ACTIVATE_UI_SETTINGS => NativeMethods.RegisterWindowMessage(UiSettingsProjectGuid);
 
 
         public static AppSettings Load()

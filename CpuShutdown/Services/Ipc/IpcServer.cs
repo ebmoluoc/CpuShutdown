@@ -45,7 +45,7 @@ namespace CpuShutdown.Services.Ipc
 
                 try
                 {
-                    var commandLine = $"\"{AppSettings.UiTrayPath}\" {AppSettings.MutexNameSwitch}{AppSettings.UiTrayMutexName} {AppSettings.PipeHandleSwitch}{_pipeData.GetClientHandleAsString()}";
+                    var commandLine = $"\"{AppSettings.UiTrayPath}\" {AppSettings.ProjectGuidSwitch}{AppSettings.UiTrayProjectGuid} {AppSettings.PipeHandleSwitch}{_pipeData.GetClientHandleAsString()}";
                     _clientProcessId = Helpers.CreateProcessAsUser(null, commandLine, sessionId);
 
                     _pipeData.DisposeLocalCopyOfClientHandle();

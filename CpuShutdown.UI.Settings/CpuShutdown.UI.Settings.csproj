@@ -10,6 +10,7 @@
     <ApplicationIcon>Resources\IconApplication.ico</ApplicationIcon>
     <Authors>Philippe Coulombe</Authors>
     <Copyright>Copyright (c) 2020 Philippe Coulombe</Copyright>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

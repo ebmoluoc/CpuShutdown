@@ -21,22 +21,26 @@ namespace CpuShutdown.Service
         {
             TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
             AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
-            var serviceMutexName = new ArgsReader().MutexName;
-            if (serviceMutexName == AppSettings.ServiceMutexName)
+            var serviceGuid = new ArgsReader().ProjectGuid;
+            if (serviceGuid == AppSettings.ServiceProjectGuid)
             {
                 AppSettings.Initialize();
                 Log.Logger = AppSettings.Logger;
 
-                using var serviceMutex = Helpers.CreateOwnedMutex($"Global\\{AppSettings.ServiceMutexName}");
+                if (Helpers.IsServiceRunning(AppSettings.ServiceName))
+                    throw new InvalidOperationException("Service already running");
 
                 var host = CreateHost();
                 host.Run();
-
-                serviceMutex.ReleaseMutex();
-
-                Log.CloseAndFlush();
             }
+        }
+
+
+        private static void OnProcessExit(object sender, EventArgs e)
+        {
+            Log.CloseAndFlush();
         }
 
 
@@ -63,7 +67,6 @@ namespace CpuShutdown.Service
         private static void ExceptionLogger(Exception ex, [CallerMemberName] string callerName = "")
         {
             Log.Fatal(ex, $"Unhandled Exception ({typeof(Program).Assembly.GetName().Name}) caught by {callerName}");
-            Log.CloseAndFlush();
             Environment.Exit(1);
         }
 

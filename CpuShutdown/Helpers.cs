@@ -37,12 +37,20 @@ namespace CpuShutdown
         }
 
 
+        public static bool IsServiceRunning(string name)
+        {
+            using var service = new ServiceController(name);
+            return service.Status == ServiceControllerStatus.Running;
+        }
+
+
         public static void RestartService(string name)
         {
             using var service = new ServiceController(name);
             service.Stop();
-            service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(2));
+            service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(5));
             service.Start();
+            service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(5));
         }
 
 

@@ -27,8 +27,8 @@ namespace CpuShutdown.UI.Settings
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.PreviewMouseLeftButtonDownEvent, new RoutedEventHandler(OnTextBoxPreviewMouseLeftButtonDown), true);
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotKeyboardFocusEvent, new RoutedEventHandler(OnTextBoxGotKeyboardFocus), true);
 
-            var uiSettingsMutexName = new ArgsReader().MutexName;
-            if (uiSettingsMutexName != AppSettings.UiSettingsMutexName)
+            var uiSettingsGuid = new ArgsReader().ProjectGuid;
+            if (uiSettingsGuid != AppSettings.UiSettingsProjectGuid)
             {
                 Shutdown();
             }
@@ -36,7 +36,7 @@ namespace CpuShutdown.UI.Settings
             {
                 Log.Logger = AppSettings.Logger;
 
-                _uiSettingsMutex = Helpers.CreateOwnedMutex(uiSettingsMutexName);
+                _uiSettingsMutex = Helpers.CreateOwnedMutex(uiSettingsGuid);
 
                 MainWindow = new SettingsView();
                 MainWindow.Show();

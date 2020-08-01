@@ -18,32 +18,41 @@ namespace CpuShutdown.UI.Tray
     public static class Program
     {
 
+        private static Mutex _uiTrayMutex;
+
+
         [STAThread]
         public static void Main()
         {
             TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
             AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
             Application.ThreadException += OnApplicationThreadException;
+            Application.ApplicationExit += OnApplicationExit;
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var uiTrayMutexName = new ArgsReader().MutexName;
-            if (uiTrayMutexName == AppSettings.UiTrayMutexName)
+            var uiTrayGuid = new ArgsReader().ProjectGuid;
+            if (uiTrayGuid == AppSettings.UiTrayProjectGuid)
             {
                 Log.Logger = AppSettings.Logger;
 
-                using var uiTrayMutex = Helpers.CreateOwnedMutex(uiTrayMutexName);
+                _uiTrayMutex = Helpers.CreateOwnedMutex(uiTrayGuid);
 
                 using var serviceProvider = CreateServiceProvider();
                 var systemTray = serviceProvider.GetRequiredService<SystemTray>();
                 Application.Run(systemTray);
-
-                uiTrayMutex.ReleaseMutex();
-
-                Log.CloseAndFlush();
             }
+        }
+
+
+        private static void OnApplicationExit(object sender, EventArgs e)
+        {
+            _uiTrayMutex?.ReleaseMutex();
+            _uiTrayMutex?.Dispose();
+
+            Log.CloseAndFlush();
         }
 
 
@@ -65,7 +74,6 @@ namespace CpuShutdown.UI.Tray
         private static void ExceptionLogger(Exception ex, [CallerMemberName] string callerName = "")
         {
             Log.Fatal(ex, $"Unhandled Exception ({typeof(Program).Assembly.GetName().Name}) caught by {callerName}");
-            Log.CloseAndFlush();
             MessageBox.Show($"System tray application has encountered an unexpected error and needs to close.\n\n{ex?.Message}", AppSettings.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             Application.Exit();
         }

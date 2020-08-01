@@ -3,7 +3,7 @@
     public interface IArgsReader
     {
         string[] Args { get; set; }
-        string MutexName { get; }
+        string ProjectGuid { get; }
         string PipeHandle { get; }
     }
 }
