@@ -9,7 +9,7 @@
     <ApplicationManifest>App.manifest</ApplicationManifest>
     <ApplicationIcon>Resources\IconApplication.ico</ApplicationIcon>
     <Authors>Philippe Coulombe</Authors>
-    <Copyright>Copyright (c) 2020 Philippe Coulombe</Copyright>
+    <Copyright>Copyright (c) 2021 Philippe Coulombe</Copyright>
     <Version>1.2.0</Version>
   </PropertyGroup>
 

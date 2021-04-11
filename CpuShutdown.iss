@@ -1,7 +1,7 @@
 [Setup]
 AppId={{CDF8D637-2981-4038-A383-0441BB037CCC}
 SetupMutex=Global\CDF8D637-2981-4038-A383-0441BB037CCC
-AppCopyright=Copyright (c) 2020 Philippe Coulombe
+AppCopyright=Copyright (c) 2021 Philippe Coulombe
 AppPublisher=Philippe Coulombe
 AppVersion=1.2.0.0
 VersionInfoVersion=1.2.0.0
