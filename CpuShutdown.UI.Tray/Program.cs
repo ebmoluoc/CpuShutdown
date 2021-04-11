@@ -33,17 +33,16 @@ namespace CpuShutdown.UI.Tray
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var uiTrayGuid = new ArgsReader().ProjectGuid;
-            if (uiTrayGuid == AppSettings.UiTrayProjectGuid)
-            {
-                Log.Logger = AppSettings.Logger;
+            Log.Logger = AppSettings.Logger;
 
-                _uiTrayMutex = Helpers.CreateOwnedMutex(uiTrayGuid);
+            if (!Helpers.IsServiceRunning(AppSettings.ServiceName))
+                throw new InvalidOperationException("Service not running");
 
-                using var serviceProvider = CreateServiceProvider();
-                var systemTray = serviceProvider.GetRequiredService<SystemTray>();
-                Application.Run(systemTray);
-            }
+            _uiTrayMutex = Helpers.CreateOwnedMutex("90D209F8-F0B2-4869-B904-3BB398FD198A");
+
+            using var serviceProvider = CreateServiceProvider();
+            var systemTray = serviceProvider.GetRequiredService<SystemTray>();
+            Application.Run(systemTray);
         }
 
 

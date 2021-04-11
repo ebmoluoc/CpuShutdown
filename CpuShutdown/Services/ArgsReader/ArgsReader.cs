@@ -10,9 +10,6 @@ namespace CpuShutdown.Services.ArgsReader
         public string[] Args { get; set; } = Environment.GetCommandLineArgs();
 
 
-        public string ProjectGuid => GetArgument(AppSettings.ProjectGuidSwitch, Args);
-
-
         public string PipeHandle => GetArgument(AppSettings.PipeHandleSwitch, Args);
 
 

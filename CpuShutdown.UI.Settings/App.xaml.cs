@@ -1,5 +1,4 @@
-﻿using CpuShutdown.Services.ArgsReader;
-using CpuShutdown.Settings;
+﻿using CpuShutdown.Settings;
 using Serilog;
 using System;
 using System.Runtime.CompilerServices;
@@ -27,20 +26,22 @@ namespace CpuShutdown.UI.Settings
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.PreviewMouseLeftButtonDownEvent, new RoutedEventHandler(OnTextBoxPreviewMouseLeftButtonDown), true);
             EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotKeyboardFocusEvent, new RoutedEventHandler(OnTextBoxGotKeyboardFocus), true);
 
-            var uiSettingsGuid = new ArgsReader().ProjectGuid;
-            if (uiSettingsGuid != AppSettings.UiSettingsProjectGuid)
+            Log.Logger = AppSettings.Logger;
+
+            try
+            {
+                if (!Helpers.IsServiceRunning(AppSettings.ServiceName))
+                    throw new InvalidOperationException("Service not running");
+
+                _uiSettingsMutex = Helpers.CreateOwnedMutex("902B4B8F-F880-4B40-8EBC-61566A9D8348");
+            }
+            catch (InvalidOperationException)
             {
                 Shutdown();
             }
-            else
-            {
-                Log.Logger = AppSettings.Logger;
 
-                _uiSettingsMutex = Helpers.CreateOwnedMutex(uiSettingsGuid);
-
-                MainWindow = new SettingsView();
-                MainWindow.Show();
-            }
+            MainWindow = new SettingsView();
+            MainWindow.Show();
         }
 
 

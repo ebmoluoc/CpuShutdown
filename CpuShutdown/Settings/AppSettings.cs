@@ -2,6 +2,7 @@
 using Serilog;
 using Serilog.Events;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -10,8 +11,27 @@ using System.Text.Json;
 namespace CpuShutdown.Settings
 {
 
-    public sealed partial class AppSettings
+    public sealed class AppSettings : SettingsBase
     {
+
+        private ServiceSettings _serviceSettings;
+        [Required(ErrorMessage = "{0} is required")]
+        public ServiceSettings ServiceSettings
+        {
+            get { return _serviceSettings; }
+            set { SetProperty(ref _serviceSettings, value); }
+        }
+
+        public void Save()
+        {
+            if (HasErrors)
+                throw new InvalidOperationException("Cannot save settings containing errors");
+
+            var json = JsonSerializer.Serialize(this);
+
+            File.WriteAllText(AppSettingsJsonPath, json);
+        }
+
 
         internal static string AppDirectory => Path.GetDirectoryName(typeof(AppSettings).Assembly.Location);
 
@@ -25,8 +45,6 @@ namespace CpuShutdown.Settings
 
         internal static string UiTrayPath => Path.Combine(AppDirectory, "CpuShutdown.UI.Tray.exe");
 
-        internal static string ProjectGuidSwitch => "-g:";
-
         internal static string PipeHandleSwitch => "-p:";
 
         public static string ApplicationName => "CPU Shutdown";
@@ -37,16 +55,9 @@ namespace CpuShutdown.Settings
 
         public static string ServiceName => "CpuShutdownSvc";
 
-        public static string UiSettingsProjectGuid => "902B4B8F-F880-4B40-8EBC-61566A9D8348";
-
-        public static string UiTrayProjectGuid => "90D209F8-F0B2-4869-B904-3BB398FD198A";
-
-        public static string ServiceProjectGuid => "C6BAB326-3F3B-4686-8DE8-AD8C198943D2";
-
         public static ILogger Logger => new LoggerConfiguration().MinimumLevel.Override("Microsoft", LogEventLevel.Warning).WriteTo.File(LogFilePath, fileSizeLimitBytes: 10485760, rollingInterval: RollingInterval.Month, retainedFileCountLimit: 2, shared: true).CreateLogger();
 
-        public static int WM_ACTIVATE_UI_SETTINGS => NativeMethods.RegisterWindowMessage(UiSettingsProjectGuid);
-
+        public static int WM_ACTIVATE_UI_SETTINGS => NativeMethods.RegisterWindowMessage("906CBE76-6083-4C4C-912E-5F576FD26648");
 
         public static AppSettings Load()
         {
@@ -58,7 +69,6 @@ namespace CpuShutdown.Settings
 
             return appSettings;
         }
-
 
         /// <summary>
         /// Because there is one log file shared by all processes and not all processes have admin privilege,

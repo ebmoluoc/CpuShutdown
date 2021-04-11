@@ -1,4 +1,3 @@
-using CpuShutdown.Services.ArgsReader;
 using CpuShutdown.Services.CpuSensor;
 using CpuShutdown.Services.Ipc;
 using CpuShutdown.Services.SensLogon2;
@@ -23,18 +22,14 @@ namespace CpuShutdown.Service
             AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
-            var serviceGuid = new ArgsReader().ProjectGuid;
-            if (serviceGuid == AppSettings.ServiceProjectGuid)
-            {
-                AppSettings.Initialize();
-                Log.Logger = AppSettings.Logger;
+            AppSettings.Initialize();
+            Log.Logger = AppSettings.Logger;
 
-                if (Helpers.IsServiceRunning(AppSettings.ServiceName))
-                    throw new InvalidOperationException("Service already running");
+            if (Helpers.IsServiceRunning(AppSettings.ServiceName))
+                throw new InvalidOperationException("Service already running");
 
-                var host = CreateHost();
-                host.Run();
-            }
+            var host = CreateHost();
+            host.Run();
         }
 
 

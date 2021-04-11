@@ -26,7 +26,7 @@ Source: "Publish\*"; Excludes: "appsettings.json"; DestDir: {app}; Flags: restar
 Source: "Publish\appsettings.json"; DestDir: {app}; Flags: restartreplace uninsrestartdelete onlyifdoesntexist
 
 [Run]
-Filename: {sys}\sc.exe; Parameters: "create CpuShutdownSvc displayname= ""CPU Shutdown"" start= auto depend= SENS binpath= ""{app}\CpuShutdown.Service.exe -g:C6BAB326-3F3B-4686-8DE8-AD8C198943D2"""; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "create CpuShutdownSvc displayname= ""CPU Shutdown"" start= auto depend= SENS binpath= ""{app}\CpuShutdown.Service.exe"""; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "description CpuShutdownSvc ""Shuts down the system when a critical CPU temperature is reached."""; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "start CpuShutdownSvc"; Flags: runhidden
 
