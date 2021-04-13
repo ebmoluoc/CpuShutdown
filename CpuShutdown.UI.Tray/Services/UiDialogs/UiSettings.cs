@@ -1,13 +1,13 @@
-﻿using CpuShutdown.Interops;
-using CpuShutdown.Settings;
+﻿using CpuShutdown.Settings;
+using CpuShutdown.UI.Tray.Interops;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace CpuShutdown.Services.UiSettings
+namespace CpuShutdown.UI.Tray.Services.UiDialogs
 {
 
-    public sealed class UiSettings : IUiSettings, IDisposable
+    public sealed class UiSettings : IUiDialog, IDisposable
     {
 
         private readonly object _shownLock = new object();

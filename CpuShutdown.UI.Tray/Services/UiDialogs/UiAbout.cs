@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace CpuShutdown.UI.Tray.Services.UiAbout
+namespace CpuShutdown.UI.Tray.Services.UiDialogs
 {
 
-    public sealed class UiAbout : IUiAbout, IDisposable
+    public sealed class UiAbout : IUiDialog, IDisposable
     {
 
         private readonly object _shownLock = new object();

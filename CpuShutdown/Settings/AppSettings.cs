@@ -41,11 +41,11 @@ namespace CpuShutdown.Settings
 
         internal static string AppSettingsJsonPath => Path.Combine(AppDirectory, "appsettings.json");
 
-        internal static string UiSettingsPath => Path.Combine(AppDirectory, "CpuShutdown.UI.Settings.exe");
-
         internal static string UiTrayPath => Path.Combine(AppDirectory, "CpuShutdown.UI.Tray.exe");
 
         internal static string PipeHandleSwitch => "-p:";
+
+        public static string UiSettingsPath => Path.Combine(AppDirectory, "CpuShutdown.UI.Settings.exe");
 
         public static string ApplicationName => "CPU Shutdown";
 

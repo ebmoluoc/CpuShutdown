@@ -1,7 +1,6 @@
 ﻿using CpuShutdown.Services.ArgsReader;
 using CpuShutdown.Services.Ipc;
-using CpuShutdown.Services.UiSettings;
-using CpuShutdown.UI.Tray.Services.UiAbout;
+using CpuShutdown.UI.Tray.Services.UiDialogs;
 using CpuShutdown.UI.Tray.Services.UiNotifyIcon;
 using System;
 using System.Windows.Forms;
@@ -16,7 +15,7 @@ namespace CpuShutdown.UI.Tray
         private readonly IUiNotifyIcon _uiNotifyIcon;
 
 
-        public SystemTray(IArgsReader argsReader, IIpcClient ipcClient, IUiNotifyIcon uiNotifyIcon, IUiSettings uiSettings, IUiAbout uiAbout)
+        public SystemTray(IArgsReader argsReader, IIpcClient ipcClient, IUiNotifyIcon uiNotifyIcon, IUiDialog uiSettings, IUiDialog uiAbout)
         {
             _uiNotifyIcon = uiNotifyIcon;
             _uiNotifyIcon.SetSettingsClickHandler((object sender, EventArgs e) => uiSettings.Show());

@@ -1,8 +1,7 @@
 using CpuShutdown.Services.ArgsReader;
 using CpuShutdown.Services.Ipc;
-using CpuShutdown.Services.UiSettings;
 using CpuShutdown.Settings;
-using CpuShutdown.UI.Tray.Services.UiAbout;
+using CpuShutdown.UI.Tray.Services.UiDialogs;
 using CpuShutdown.UI.Tray.Services.UiNotifyIcon;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -62,8 +61,8 @@ namespace CpuShutdown.UI.Tray
             serviceCollection.AddTransient<IArgsReader, ArgsReader>();
             serviceCollection.AddTransient<IIpcClient, IpcClient>();
             serviceCollection.AddTransient<IUiNotifyIcon, UiNotifyIcon>();
-            serviceCollection.AddTransient<IUiSettings, UiSettings>();
-            serviceCollection.AddTransient<IUiAbout, UiAbout>();
+            serviceCollection.AddTransient<IUiDialog, UiSettings>();
+            serviceCollection.AddTransient<IUiDialog, UiAbout>();
             serviceCollection.AddTransient<SystemTray>();
 
             return serviceCollection.BuildServiceProvider();

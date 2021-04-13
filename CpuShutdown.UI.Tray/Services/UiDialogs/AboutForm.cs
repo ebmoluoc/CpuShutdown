@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace CpuShutdown.UI.Tray.Services.UiAbout
+namespace CpuShutdown.UI.Tray.Services.UiDialogs
 {
 
     public partial class AboutForm : Form
