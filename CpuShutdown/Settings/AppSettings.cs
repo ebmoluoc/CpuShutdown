@@ -28,7 +28,6 @@ namespace CpuShutdown.Settings
                 throw new InvalidOperationException("Cannot save settings containing errors");
 
             var json = JsonSerializer.Serialize(this);
-
             File.WriteAllText(AppSettingsJsonPath, json);
         }
 
@@ -61,8 +60,8 @@ namespace CpuShutdown.Settings
 
         public static AppSettings Load()
         {
-            var text = File.ReadAllText(AppSettingsJsonPath);
-            var appSettings = JsonSerializer.Deserialize<AppSettings>(text);
+            var json = File.ReadAllText(AppSettingsJsonPath);
+            var appSettings = JsonSerializer.Deserialize<AppSettings>(json);
 
             if (appSettings.HasErrors)
                 throw new InvalidOperationException("Cannot load settings containing errors");

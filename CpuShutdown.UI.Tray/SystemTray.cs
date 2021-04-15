@@ -22,12 +22,12 @@ namespace CpuShutdown.UI.Tray
             _uiNotifyIcon.SetAboutClickHandler((object sender, EventArgs e) => uiAbout.Show());
 
             _ipcClient = ipcClient;
-            _ipcClient.IpcClientDataEvent += OnIpcClientDataEvent;
+            _ipcClient.IpcClientDataEvent += OnDataEvent;
             _ipcClient.Open(argsReader.PipeHandle);
         }
 
 
-        private void OnIpcClientDataEvent(object sender, IpcClientDataEventArgs e)
+        private void OnDataEvent(object sender, IpcClientDataEventArgs e)
         {
             _uiNotifyIcon.SetTemperature(e.Temperature);
 

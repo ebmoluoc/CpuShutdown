@@ -9,9 +9,9 @@ namespace CpuShutdown.UI.Tray.Services.UiNotifyIcon
     public sealed class UiNotifyIcon : IUiNotifyIcon, IDisposable
     {
 
-        private readonly NotifyIcon _notifyIcon = new NotifyIcon { Text = AppSettings.ApplicationName, Visible = true };
-        private readonly ContextMenuStrip _contextMenuStrip = new ContextMenuStrip { ShowImageMargin = false };
-        private readonly SoundPlayer _soundPlayer = new SoundPlayer(Properties.Resources.AudioAlert);
+        private readonly NotifyIcon _notifyIcon = new() { Text = AppSettings.ApplicationName, Visible = true };
+        private readonly ContextMenuStrip _contextMenuStrip = new() { ShowImageMargin = false };
+        private readonly SoundPlayer _soundPlayer = new(Properties.Resources.AudioAlert);
 
 
         public UiNotifyIcon()
@@ -28,15 +28,15 @@ namespace CpuShutdown.UI.Tray.Services.UiNotifyIcon
         }
 
 
-        public void SetSettingsClickHandler(EventHandler onSettingsClick)
+        public void SetSettingsClickHandler(EventHandler onClick)
         {
-            _contextMenuStrip.Items.Add("Settings", null, onSettingsClick);
+            _contextMenuStrip.Items.Add("Settings", null, onClick);
         }
 
 
-        public void SetAboutClickHandler(EventHandler onAboutClick)
+        public void SetAboutClickHandler(EventHandler onClick)
         {
-            _contextMenuStrip.Items.Add($"About {AppSettings.ApplicationName}", null, onAboutClick);
+            _contextMenuStrip.Items.Add($"About {AppSettings.ApplicationName}", null, onClick);
         }
 
 

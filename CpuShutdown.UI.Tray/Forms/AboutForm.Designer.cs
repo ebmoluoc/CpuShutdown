@@ -1,4 +1,4 @@
-﻿namespace CpuShutdown.UI.Tray.Services.UiDialogs
+﻿namespace CpuShutdown.UI.Tray.Forms
 {
     partial class AboutForm
     {

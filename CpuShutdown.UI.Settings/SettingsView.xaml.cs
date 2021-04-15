@@ -62,7 +62,8 @@ namespace CpuShutdown.UI.Settings
             var appSettings = (AppSettings)DataContext;
             appSettings.Save();
 
-            Helpers.RestartService(AppSettings.ServiceName);
+            if (Helpers.IsServiceRunning(AppSettings.ServiceName))
+                Helpers.RestartService(AppSettings.ServiceName);
 
             Close();
         }

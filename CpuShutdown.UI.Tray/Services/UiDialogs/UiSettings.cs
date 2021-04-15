@@ -10,23 +10,23 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
     public sealed class UiSettings : IUiDialog, IDisposable
     {
 
-        private readonly object _shownLock = new object();
-        private Process _uiSettings;
-        private bool _isDisposed;
+        private readonly object _shown = new();
+        private Process _process;
+        private bool _disposed;
 
 
         public void Dispose()
         {
-            lock (_shownLock)
+            lock (_shown)
             {
                 if (IsShown)
                 {
-                    _uiSettings.EnableRaisingEvents = false;
-                    _uiSettings.Exited -= OnUiSettingsExited;
+                    _process.EnableRaisingEvents = false;
+                    _process.Exited -= OnExited;
 
                     try
                     {
-                        NativeMethods.SendMessage(_uiSettings.MainWindowHandle, NativeMethods.WM_SYSCOMMAND, (IntPtr)NativeMethods.SC_CLOSE, IntPtr.Zero);
+                        NativeMethods.SendMessage(_process.MainWindowHandle, NativeMethods.WM_SYSCOMMAND, (IntPtr)NativeMethods.SC_CLOSE, IntPtr.Zero);
                     }
                     catch (InvalidOperationException)
                     {
@@ -34,12 +34,12 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
                     }
                     finally
                     {
-                        _uiSettings.Dispose();
-                        _uiSettings = null;
-
-                        _isDisposed = true;
+                        _process.Dispose();
+                        _process = null;
                     }
                 }
+
+                _disposed = true;
             }
         }
 
@@ -48,9 +48,9 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
         {
             get
             {
-                lock (_shownLock)
+                lock (_shown)
                 {
-                    return _uiSettings != null;
+                    return _process != null;
                 }
             }
         }
@@ -58,9 +58,9 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
 
         public void Show()
         {
-            lock (_shownLock)
+            lock (_shown)
             {
-                if (!_isDisposed)
+                if (!_disposed)
                 {
                     if (IsShown)
                     {
@@ -68,24 +68,25 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
                     }
                     else
                     {
-                        _uiSettings = new Process();
-                        _uiSettings.StartInfo.FileName = AppSettings.UiSettingsPath;
-                        _uiSettings.StartInfo.UseShellExecute = true;
-                        _uiSettings.StartInfo.Verb = "runas";
-                        _uiSettings.Exited += OnUiSettingsExited;
-                        _uiSettings.EnableRaisingEvents = true;
+                        _process = new Process();
+                        _process.StartInfo.FileName = AppSettings.UiSettingsPath;
+                        _process.StartInfo.UseShellExecute = true;
+                        _process.StartInfo.Verb = "runas";
+                        _process.Exited += OnExited;
+                        _process.EnableRaisingEvents = true;
 
                         try
                         {
-                            _uiSettings.Start();
+                            _process.Start();
                         }
                         catch (Exception ex)
                         {
-                            _uiSettings.Dispose();
-                            _uiSettings = null;
+                            _process.Dispose();
+                            _process = null;
 
-                            // 1223 : runas was cancelled by user
-                            if (!(ex is Win32Exception win32Exception && win32Exception.NativeErrorCode == 1223))
+                            // runas was cancelled by user
+                            var win32Exception = ex as Win32Exception;
+                            if (win32Exception?.NativeErrorCode != NativeMethods.ERROR_CANCELLED)
                                 throw;
                         }
                     }
@@ -94,12 +95,12 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
         }
 
 
-        private void OnUiSettingsExited(object sender, EventArgs e)
+        private void OnExited(object sender, EventArgs e)
         {
-            lock (_shownLock)
+            lock (_shown)
             {
-                _uiSettings?.Dispose();
-                _uiSettings = null;
+                _process?.Dispose();
+                _process = null;
             }
         }
 

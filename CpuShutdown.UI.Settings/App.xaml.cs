@@ -14,7 +14,7 @@ namespace CpuShutdown.UI.Settings
     public partial class App : Application
     {
 
-        private Mutex _uiSettingsMutex;
+        private Mutex _mutex;
 
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -28,17 +28,7 @@ namespace CpuShutdown.UI.Settings
 
             Log.Logger = AppSettings.Logger;
 
-            try
-            {
-                if (!Helpers.IsServiceRunning(AppSettings.ServiceName))
-                    throw new InvalidOperationException("Service not running");
-
-                _uiSettingsMutex = Helpers.CreateOwnedMutex("902B4B8F-F880-4B40-8EBC-61566A9D8348");
-            }
-            catch (InvalidOperationException)
-            {
-                Shutdown();
-            }
+            _mutex = Helpers.CreateOwnedMutex("902B4B8F-F880-4B40-8EBC-61566A9D8348");
 
             MainWindow = new SettingsView();
             MainWindow.Show();
@@ -47,8 +37,8 @@ namespace CpuShutdown.UI.Settings
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            _uiSettingsMutex?.ReleaseMutex();
-            _uiSettingsMutex?.Dispose();
+            _mutex?.ReleaseMutex();
+            _mutex?.Dispose();
 
             Log.CloseAndFlush();
         }

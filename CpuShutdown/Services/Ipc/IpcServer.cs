@@ -10,7 +10,7 @@ namespace CpuShutdown.Services.Ipc
     public sealed class IpcServer : IIpcServer, IDisposable
     {
 
-        private readonly object _openLock = new object();
+        private readonly object _openLock = new();
         private readonly byte[] _bufferData = new byte[8];
         private AnonymousPipeServerStream _pipeData;
         private uint _clientProcessId;

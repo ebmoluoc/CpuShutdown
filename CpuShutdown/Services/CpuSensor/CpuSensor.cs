@@ -9,7 +9,7 @@ namespace CpuShutdown.Services.CpuSensor
 
         private const string _Name = "CPU Package";
 
-        private readonly Computer _computer = new Computer { CPUEnabled = true };
+        private readonly Computer _computer = new() { CPUEnabled = true };
         private readonly IHardware _cpu;
 
 

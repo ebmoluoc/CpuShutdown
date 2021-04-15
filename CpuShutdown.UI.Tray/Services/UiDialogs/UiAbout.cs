@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CpuShutdown.UI.Tray.Forms;
+using System;
 using System.Windows.Forms;
 
 namespace CpuShutdown.UI.Tray.Services.UiDialogs
@@ -7,18 +8,22 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
     public sealed class UiAbout : IUiDialog, IDisposable
     {
 
-        private readonly object _shownLock = new object();
-        private Form _uiAbout;
-        private bool _isDisposed;
+        private readonly object _shown = new();
+        private Form _form;
+        private bool _disposed;
 
 
         public void Dispose()
         {
-            lock (_shownLock)
+            lock (_shown)
             {
-                _uiAbout?.Dispose();
-                _uiAbout = null;
-                _isDisposed = true;
+                if (IsShown)
+                {
+                    _form.Dispose();
+                    _form = null;
+                }
+
+                _disposed = true;
             }
         }
 
@@ -27,9 +32,9 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
         {
             get
             {
-                lock (_shownLock)
+                lock (_shown)
                 {
-                    return _uiAbout != null;
+                    return _form != null;
                 }
             }
         }
@@ -37,33 +42,33 @@ namespace CpuShutdown.UI.Tray.Services.UiDialogs
 
         public void Show()
         {
-            lock (_shownLock)
+            lock (_shown)
             {
-                if (!_isDisposed)
+                if (!_disposed)
                 {
                     if (IsShown)
                     {
-                        _uiAbout.WindowState = FormWindowState.Minimized;
-                        _uiAbout.WindowState = FormWindowState.Normal;
-                        _uiAbout.Activate();
+                        _form.WindowState = FormWindowState.Minimized;
+                        _form.WindowState = FormWindowState.Normal;
+                        _form.Activate();
                     }
                     else
                     {
-                        _uiAbout = new AboutForm();
-                        _uiAbout.FormClosed += OnAboutClosed;
-                        _uiAbout.Show();
+                        _form = new AboutForm();
+                        _form.FormClosed += OnClosed;
+                        _form.Show();
                     }
                 }
             }
         }
 
 
-        private void OnAboutClosed(object sender, EventArgs e)
+        private void OnClosed(object sender, EventArgs e)
         {
-            lock (_shownLock)
+            lock (_shown)
             {
-                _uiAbout?.Dispose();
-                _uiAbout = null;
+                _form?.Dispose();
+                _form = null;
             }
         }
 

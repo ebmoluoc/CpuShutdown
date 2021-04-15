@@ -12,7 +12,7 @@ namespace CpuShutdown.Settings
     public abstract class SettingsBase : INotifyPropertyChanged, INotifyDataErrorInfo
     {
 
-        private readonly Dictionary<string, List<ValidationResult>> _errors = new Dictionary<string, List<ValidationResult>>();
+        private readonly Dictionary<string, List<ValidationResult>> _errors = new();
 
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -17,7 +17,7 @@ namespace CpuShutdown.UI.Tray
     public static class Program
     {
 
-        private static Mutex _uiTrayMutex;
+        private static Mutex _mutex;
 
 
         [STAThread]
@@ -34,10 +34,7 @@ namespace CpuShutdown.UI.Tray
 
             Log.Logger = AppSettings.Logger;
 
-            if (!Helpers.IsServiceRunning(AppSettings.ServiceName))
-                throw new InvalidOperationException("Service not running");
-
-            _uiTrayMutex = Helpers.CreateOwnedMutex("90D209F8-F0B2-4869-B904-3BB398FD198A");
+            _mutex = Helpers.CreateOwnedMutex("90D209F8-F0B2-4869-B904-3BB398FD198A");
 
             using var serviceProvider = CreateServiceProvider();
             var systemTray = serviceProvider.GetRequiredService<SystemTray>();
@@ -47,8 +44,8 @@ namespace CpuShutdown.UI.Tray
 
         private static void OnApplicationExit(object sender, EventArgs e)
         {
-            _uiTrayMutex?.ReleaseMutex();
-            _uiTrayMutex?.Dispose();
+            _mutex?.ReleaseMutex();
+            _mutex?.Dispose();
 
             Log.CloseAndFlush();
         }
